@@ -1,0 +1,69 @@
+/* Auth.css */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg, #1e1e2f, #3a3a5b);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-container {
+  background: #2c2c3e;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+  width: 300px;
+  text-align: center;
+}
+
+.auth-container h2 {
+  margin-bottom: 20px;
+}
+
+.auth-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  background: #3d3d5c;
+  color: #fff;
+  outline: none;
+}
+
+.auth-btn {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.auth-btn:hover {
+  opacity: 0.9;
+}
+
+.signin-btn {
+  background: #4caf50;
+  color: #fff;
+}
+
+.google-btn {
+  background: #db4437;
+  color: #fff;
+}
+
+.login-btn {
+  background: #008cba;
+  color: #fff;
+}
+
+.logout-btn {
+  background: #f44336;
+  color: #fff;
+}
