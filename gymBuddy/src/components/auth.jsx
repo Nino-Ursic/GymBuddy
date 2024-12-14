@@ -2,10 +2,17 @@
 import React, { useState } from "react";
 import { signIn, signInWithGoogle, logIn, logOut } from "../config/firebase-config";
 import "./Auth.css"; // Ensure this file exists
+import { useNavigate } from "react-router-dom";
 
 function Auth() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+    
+    function noLogIn(){
+        
+        navigate('/home');
+    }
 
     return (
         <div className="auth-container">
@@ -42,8 +49,8 @@ function Auth() {
                 </button>
             </div>
             <div className="auth-btn-container">
-                <button className="auth-btn logout-btn" onClick={logOut}>
-                    Log out
+                <button className="auth-btn logout-btn" onClick={noLogIn}>
+                    continue without
                 </button>
             </div>
         </div>

@@ -1,0 +1,46 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Make the Navbar Fixed & Full Width */
+  .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #333;
+    padding: 0 20px;
+    border-bottom: 2px solid #555;
+    z-index: 1000;
+  }
+  
+  /* Container to align nav items */
+  .nav-container {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 50px;
+  }
+  
+  /* Link Styling */
+  .nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+  }
+  
+  /* Hover Effect */
+  .nav-link:hover {
+    color: #f39c12;
+  }
+  
+  /* Active Link */
+  .nav-link.active {
+    font-weight: bold;
+    color: #f39c12;
+  }
+  
