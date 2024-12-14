@@ -9,10 +9,6 @@ function Auth() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     
-    function noLogIn(){
-        
-        navigate('/home');
-    }
 
     return (
         <div className="auth-container">
@@ -34,22 +30,22 @@ function Auth() {
                 />
             </div>
             <div className="auth-btn-container">
-                <button className="auth-btn signin-btn" onClick={() => signIn(email, password)}>
+                <button className="auth-btn signin-btn" onClick={() => {signIn(email, password, navigate)}}>
                     Sign in
                 </button>
             </div>
             <div className="auth-btn-container">
-                <button className="auth-btn google-btn" onClick={signInWithGoogle}>
+                <button className="auth-btn google-btn" onClick={() => {signInWithGoogle(navigate)}}>
                     Sign in with Google
                 </button>
             </div>
             <div className="auth-btn-container">
-                <button className="auth-btn login-btn" onClick={() => logIn(email, password)}>
+                <button className="auth-btn login-btn" onClick={() => {logIn(email, password, navigate)}}>
                     Log in
                 </button>
             </div>
             <div className="auth-btn-container">
-                <button className="auth-btn logout-btn" onClick={noLogIn}>
+                <button className="auth-btn logout-btn" onClick={()=> navigate('/home')}>
                     continue without
                 </button>
             </div>

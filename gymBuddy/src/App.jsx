@@ -11,30 +11,17 @@ import Navbar from './components/navbar';
 
 import ProtectedRoute from './components/protectedRoute';
 
-import { useState, useEffect } from 'react';
-import {auth} from './config/firebase-config';
-
+import { AuthProvider } from './components/authContext';
 
 function App() {
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
-
-  useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged(user => {
-      setCurrentUser(user);
-      setIsLoading(false);
-    });
-    return () => unsubscribe();
-  }, []);
-
-
   return (
     <>
+    <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path='/' element={<Auth/>} />
-          <Route element={<Navbar/>}>
+          <Route element={<Navbar />}>
             <Route path='/home' element={<Home/>} />
             <Route path='/training' element={<Training />} />
             <Route path='/trainingPlan' element={<TrainingPlan />} />
@@ -42,10 +29,11 @@ function App() {
               <Route path='/history' element={<History />} />
             </Route>
             <Route path='/settings' element={<Settings />} />
-            <Route path='*' element={<h1>ERROR</h1>} />
+            <Route path='*' element={<h1>NOT FOUND</h1>} />
           </Route>
         </Routes>
       </BrowserRouter>
+    </AuthProvider>
     </>
   )
 }

@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 // Autentifikacija
 import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
+import { useAuth } from "../components/authContext";
 // Baza podataka 
 import { getFirestore, getDoc, getDocs, collection, setDoc, deleteDoc, updateDoc, doc } from "firebase/firestore";
 
@@ -21,30 +22,37 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const googleProvider = new GoogleAuthProvider();
 
-export const signIn = async (email, password, data)=>{
+
+export const signIn = async (email, password, navigate,data)=>{
     try{
         await createUserWithEmailAndPassword(auth, email, password);
         addUser({});
+        navigate('/home');
     } catch(err){
         console.error(err);
+        alert(err);
     }
 
 };
 
-export const signInWithGoogle = async ()=>{
+export const signInWithGoogle = async (navigate)=>{
     try{
         await signInWithPopup(auth, googleProvider);
+        navigate('/home');
     } catch(err){
         console.error(err);
+        alert(err);
     }
 
 };
 
-export const logIn = async (email, password)=>{
+export const logIn = async (email, password, navigate)=>{
     try{
         await signInWithEmailAndPassword(auth, email, password);
+        navigate('/home');
     } catch(err){
         console.error(err);
+        alert(err);
     }
 
 };
@@ -54,6 +62,7 @@ export const logOut = async ()=>{
         await signOut(auth);
     } catch(err){
         console.error(err);
+        alert(err);
     }
 
 };
