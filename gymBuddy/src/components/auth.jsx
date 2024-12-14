@@ -31,7 +31,7 @@ function Auth() {
             </div>
             <div className="auth-btn-container">
                 <button className="auth-btn signin-btn" onClick={() => {signIn(email, password, navigate)}}>
-                    Sign in
+                    Register
                 </button>
             </div>
             <div className="auth-btn-container">
