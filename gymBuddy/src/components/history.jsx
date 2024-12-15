@@ -6,7 +6,9 @@ function History(){
     const [exercises, setExercises] = useState([]);
     
     function handleClick(){
-        setExercises(getExercises());
+        const ex = getExercises();
+        setExercises(ex);
+        console.log(exercises);
     }
 
     return(

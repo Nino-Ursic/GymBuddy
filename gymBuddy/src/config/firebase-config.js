@@ -28,7 +28,7 @@ export const googleProvider = new GoogleAuthProvider();
 export const signIn = async (email, password, navigate,data)=>{
     try{
         await createUserWithEmailAndPassword(auth, email, password);
-        const completeData = {...data, favourite: [], isAdmin:false, createdAt: Date(), history: [], trainingId: ""};
+        const completeData = {...data, favourite: [], isAdmin:false, createdAt: Date(), history: [], trainingId: "", email: auth.currentUser.identifier};
         addUser(completeData);
         navigate('/home');
     } catch(err){
@@ -80,13 +80,15 @@ const TrainingPlan = collection(db, "TrainingPlan");
 const User = collection(db, "User");
 
 
-const addUser = async (data) => {
+export const addUser = async (data) => {
     try{
         await setDoc(doc(User, auth.currentUser.uid), data);
     } catch(err){
         console.error(err);
     }
 }
+
+
 
 export const getUser = async () => {
     try{
@@ -96,24 +98,34 @@ export const getUser = async () => {
         console.error(err);
     }
 }
+
 export const getExercises = async () => {
     try{
         const data = await getDocs(Exercise);
+        const dataReturn = [];
+        data.forEach((doc)=>{
+            dataReturn.push(doc.data());
+        })
+        console.log(dataReturn);
+        return dataReturn;
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const getTraining = async () => {
+    try{
+        const data = await getDocs(Training);
         return data.data();
     } catch(err){
         console.error(err);
     }
 }
-const getTraining = async () => {
-    try{
-        const data = await getDocs(Training);
-    } catch(err){
-        console.error(err);
-    }
-}
-const getTrainingPlan = async () => {
+
+export const getTrainingPlan = async () => {
     try{
         const data = await getDocs(TrainingPlan);
+        return data.data();
     } catch(err){
         console.error(err);
     }
