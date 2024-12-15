@@ -1,0 +1,61 @@
+User = {
+    username: "",
+    email: "",
+    age: 0,
+    weight: 0,
+    height: 0,
+    gender: M,
+    favourite: ["", "",  ""],
+    isAdmin: false,
+    createdAt: timestamp,
+    history:[
+        {date: timestamp, trainingName: "", trainingId: ""},
+        {date: timestamp, trainingName: "", trainingId: ""}
+    ],
+    trainingPlanId: ["", ""]
+}
+Exercise{
+    name: "",
+    description: "",
+    difficulty: "",
+    muscleGroup: ["", "", ""],
+    pictureURL: ""
+}
+Training{
+    name: "",
+    description: "",
+    duration: "",
+    userId: "",
+    exercises: [
+        {
+            mjera: "repetition",
+            exerciseId: "",
+            exerciseName: "",
+            repetition: 15,
+            sets: 5
+        },
+        {
+            mjera: "duration",
+            exerciseId: "",
+            exerciseName: "",
+            repetition: 10,
+            sets: 4
+        }
+    ]
+}
+
+TrainingPlan{
+    name: "",
+    description: "",
+    isCustom: "",
+    trainins: [
+        {
+            trainingId: "",
+            trainingName: ""
+        },
+        {
+            trainingId: "",
+            trainingName: ""
+        }
+    ]
+}

@@ -3,7 +3,9 @@ import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import { useAuth } from "../components/authContext";
 // Baza podataka 
-import { getFirestore, getDoc, getDocs, collection, setDoc, deleteDoc, updateDoc, doc } from "firebase/firestore";
+import { getFirestore, getDoc, getDocs, collection, setDoc, deleteDoc, updateDoc, doc, query, where } from "firebase/firestore";
+import { useState } from "react";
+
 
 //Initialize Firebase
 const firebaseConfig = {
@@ -26,7 +28,8 @@ export const googleProvider = new GoogleAuthProvider();
 export const signIn = async (email, password, navigate,data)=>{
     try{
         await createUserWithEmailAndPassword(auth, email, password);
-        addUser({});
+        const completeData = {...data, favourite: [], isAdmin:false, createdAt: Date(), history: [], trainingId: ""};
+        addUser(completeData);
         navigate('/home');
     } catch(err){
         console.error(err);
@@ -76,26 +79,27 @@ const Training = collection(db, "Training");
 const TrainingPlan = collection(db, "TrainingPlan");
 const User = collection(db, "User");
 
+
 const addUser = async (data) => {
     try{
-        await setDoc(doc(db, "User", auth.currentUser.uid), data);
+        await setDoc(doc(User, auth.currentUser.uid), data);
     } catch(err){
         console.error(err);
     }
 }
 
-const getUsers = async () => {
+export const getUser = async () => {
     try{
-        const data = await getDocs(User);
-        const filteredData = data.docs.map((doc)=>({...doc.data(), id: doc.id}));
+        const data = await getDoc(doc(db, 'User', auth.currentUser.uid));
+        return data.data();
     } catch(err){
         console.error(err);
     }
 }
-const getExercise = async () => {
+export const getExercises = async () => {
     try{
         const data = await getDocs(Exercise);
-        const filteredData = data.docs.map((doc)=>({...doc.data(), id: doc.id}));
+        return data.data();
     } catch(err){
         console.error(err);
     }
@@ -103,7 +107,6 @@ const getExercise = async () => {
 const getTraining = async () => {
     try{
         const data = await getDocs(Training);
-        const filteredData = data.docs.map((doc)=>({...doc.data(), id: doc.id}));
     } catch(err){
         console.error(err);
     }
@@ -111,7 +114,6 @@ const getTraining = async () => {
 const getTrainingPlan = async () => {
     try{
         const data = await getDocs(TrainingPlan);
-        const filteredData = data.docs.map((doc)=>({...doc.data(), id: doc.id}));
     } catch(err){
         console.error(err);
     }
