@@ -56,7 +56,7 @@ function Home() {
           onChange={(e) => setKategorija(e.target.value)}
         >
           <option value="">All Categories</option>
-          <option value="arms">Arms</option>
+          <option value="biceps">Biceps</option>
           <option value="back">Back</option>
           <option value="legs">Legs</option>
           <option value="chest">Chest</option>
