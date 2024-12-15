@@ -106,7 +106,6 @@ export const getExercises = async () => {
         data.forEach((doc)=>{
             dataReturn.push(doc.data());
         })
-        console.log(dataReturn);
         return dataReturn;
     } catch(err){
         console.error(err);

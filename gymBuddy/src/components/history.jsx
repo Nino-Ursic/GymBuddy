@@ -5,11 +5,12 @@ function History(){
 
     const [exercises, setExercises] = useState([]);
     
-    function handleClick(){
-        const ex = getExercises();
+    const handleClick = async ()=>{
+        const ex = await getExercises();
         setExercises(ex);
-        console.log(exercises);
     }
+
+    console.log(exercises);
 
     return(
         <>
