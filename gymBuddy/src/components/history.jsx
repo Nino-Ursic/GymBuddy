@@ -4,7 +4,7 @@ import { getExercises, getUser, addExercise, addTraining } from "../config/fireb
 function History(){
 
     function handleClick() {
-        
+        getUser();
     }
 
     return(
