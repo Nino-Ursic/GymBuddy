@@ -2,12 +2,12 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #1e1e2f, #3a3a5b);
   color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background: linear-gradient(135deg, #1e1e2f, #3a3a5b);
 }
 
 .auth-container {
@@ -17,7 +17,50 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   width: 300px;
   text-align: center;
+  align-self: center;
+  margin-top: 18rem;
 }
+
+/* Container for the text and button */
+.register-btn-container {
+  display: flex; 
+  align-items: center; 
+  height: 3rem;
+  gap: 0.2rem; 
+  justify-content: center;
+}
+
+/* Text Styling: Forcing text on one line */
+.register-text {
+  padding: 0;
+  margin: 0;
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  font-size: .9rem; 
+  font-weight: 50;
+  color: #ffffff;
+}
+
+/* Button Styling */
+.register-btn {
+  padding: 0%; 
+  margin: 0;
+  background-color: #4286f400; 
+  color: #ffffff; 
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.register-btn:hover {
+  background-color: #c9ced659; 
+}
+
 
 .auth-container h2 {
   margin-bottom: 20px;
@@ -53,13 +96,42 @@ body {
   color: #fff;
 }
 
-.google-btn {
-  background: #db4437;
-  color: #fff;
+.google-btn-container {
+  display: flex;
+  justify-content: center; 
+  align-items: center;
 }
 
+.google-btn {
+  padding: 0.5rem 0.8rem; 
+  margin: 0;
+  background-color: transparent; 
+  border: 2px solid #4b1fc481; 
+  color: #3c268b; 
+  border-radius: 3rem;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.google-btn:hover {
+  background-color: #684ead28; 
+  border-color: #db4437; 
+}
+
+.googleImage {
+  width: 25px; 
+  height: 25px; 
+  object-fit: contain; 
+}
+
+
 .login-btn {
-  background: #db4437;
+  background: #6d67c58a;
   color: #fff;
 }
 
@@ -83,7 +155,7 @@ body {
 }
 
 .auth-radio-label input[type="radio"] {
-  display: none; /* Hide the default radio button */
+  display: none; 
 }
 
 .auth-radio-custom {
@@ -97,7 +169,7 @@ body {
 }
 
 .auth-radio-label input[type="radio"]:checked + .auth-radio-custom {
-  background: #4caf50; /* Color for selected radio button */
+  background: #4caf50; 
 }
 
 .auth-radio-label input[type="radio"]:checked + .auth-radio-custom::after {
@@ -110,4 +182,9 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.guest-btn{
+  background-color: #1e1e2f00;
+  color: #d1d1dd8c;
 }

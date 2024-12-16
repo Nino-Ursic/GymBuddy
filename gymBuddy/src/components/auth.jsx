@@ -46,7 +46,7 @@ function Auth() {
 
     return (
         <div className="auth-container">
-            <h2>Login</h2>
+            <h2>GymBuddy</h2>
             <div className="auth-input-container">
                 <input
                     className="auth-input"
@@ -128,25 +128,26 @@ function Auth() {
             </>
             }
             <div className="auth-btn-container">
-                <button className="auth-btn signin-btn" onClick={() => {handleRegister()}}>
-                    Register
-                </button>
-            </div>
-            {!register &&
-            <>
-            <div className="auth-btn-container">
-                <button className="auth-btn google-btn" onClick={() => {signInWithGoogle(navigate)}}>
-                    Sign in with Google
-                </button>
-            </div>
-            <div className="auth-btn-container">
                 <button className="auth-btn login-btn" onClick={() => {logIn(email, password, navigate)}}>
                     Log in
                 </button>
             </div>
+            {!register &&
+            <>
+            <div className="google-btn-container">
+                <button className="google-btn" onClick={() => {signInWithGoogle(navigate)}}>
+                    <img className="googleImage" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"/>
+                </button>
+            </div>
+            <div className="register-btn-container">
+                <p className="register-text">Don't have an Account?</p>
+                <button className="register-btn" onClick={() => {handleRegister()}}>
+                    Sign up!
+                </button>
+            </div>
             <div className="auth-btn-container">
-                <button className="auth-btn logout-btn" onClick={()=> navigate('/home')}>
-                    continue without
+                <button className="guest-btn" onClick={()=> navigate('/home')}>
+                    Continue without
                 </button>
             </div>
             </>
