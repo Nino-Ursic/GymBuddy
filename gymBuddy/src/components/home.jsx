@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./home.css";
 import ItemMain from "./itemMain.jsx";
-import { getExercises } from "../config/firebase-config";
+import { getExercises, getUser } from "../config/firebase-config";
 
 function Home() {
   const [exercises, setExercises] = useState([]);  // Original exercises
   const [filteredExercises, setFilteredExercises] = useState([]);  // Filtered exercises
   const [kategorija, setKategorija] = useState(""); // Selected category
   const [difficulty, setDifficulty] = useState(""); // Selected difficulty
+  const [userFavourites, setUserFavourites] = useState(null);
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -21,6 +22,19 @@ function Home() {
     };
 
     fetchExercises();
+
+    const fetchUser = async () => {
+      try {
+        const user = await getUser();
+        console.log(user);
+        console.log(user.favourite);
+        setUserFavourites(user.favourite);
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUser();
   }, []);
 
   useEffect(() => {
@@ -94,6 +108,7 @@ function Home() {
             exerciseName={exercise.name}
             difficulty={exercise.difficulty}
             muscleGroup={exercise.muscleGroup}
+            favourites={userFavourites}
           />
         ))}
       </div>

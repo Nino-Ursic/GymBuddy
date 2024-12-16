@@ -16,7 +16,7 @@
 .item {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   background-color: #140c6b10;
   border-radius: 2rem;
@@ -39,7 +39,24 @@
   margin-bottom: 1rem;
   margin-top: 2%;
   border-radius: 1.7rem;
+  align-self: center;
 }
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.heart-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  transition: transform 0.2s ease;
+}
+
 
 /* Title of Exercise */
 .item h3 {
