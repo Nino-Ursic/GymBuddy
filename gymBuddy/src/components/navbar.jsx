@@ -7,7 +7,12 @@ import { useAuth } from "./authContext";
 function Navbar() {
 
     const navigate = useNavigate();
+
     function toLogIn(){
+        navigate('/');
+    }
+    function toLogOut(){
+        logOut();
         navigate('/');
     }
     const {currentUser} = useAuth();
@@ -22,7 +27,7 @@ function Navbar() {
                     <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/history">History</NavLink>
                     <NavLink className={({ isActive }) => isActive ? 'nav-link active' : 'nav-link'} to="/settings">Settings</NavLink>
                     {currentUser && 
-                        <button className="navbar-btn logout-navbar-btn" onClick={logOut}>
+                        <button className="navbar-btn logout-navbar-btn" onClick={toLogOut}>
                             Log Out
                         </button>
                     }

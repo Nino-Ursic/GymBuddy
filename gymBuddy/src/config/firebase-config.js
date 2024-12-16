@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import { useAuth } from "../components/authContext";
 // Baza podataka 
-import { getFirestore, getDoc, getDocs, collection, setDoc, deleteDoc, updateDoc, doc, query, where } from "firebase/firestore";
+import { getFirestore, getDoc, getDocs, collection, setDoc, addDoc, deleteDoc, updateDoc, doc, query, where, Timestamp, arrayUnion } from "firebase/firestore";
 import { useState } from "react";
 
 
@@ -28,7 +28,7 @@ export const googleProvider = new GoogleAuthProvider();
 export const signIn = async (email, password, navigate,data)=>{
     try{
         await createUserWithEmailAndPassword(auth, email, password);
-        const completeData = {...data, favourite: [], isAdmin:false, createdAt: Date(), history: [], trainingId: "", email: auth.currentUser.identifier};
+        const completeData = {...data, favourite: [], isAdmin:false, createdAt: Timestamp.fromDate(new Date()), history: [], trainingId: "", email: auth.currentUser.identifier};
         addUser(completeData);
         navigate('/home');
     } catch(err){
@@ -88,7 +88,39 @@ export const addUser = async (data) => {
     }
 }
 
+export const addExercise = async (data)  => {
+    try{
+        await addDoc(Exercise, data);
+    } catch(err){
+        console.error(err);
+    }
+}
 
+export const addTraining = async (data)  => {
+    try{
+        await addDoc(Training, data);
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const addTrainingPlan = async (data)  => {
+    try{
+        await addDoc(doc(TrainingPlan), data);
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const addFavourites = async (exercise) => {
+    try{
+        await updateDoc(doc(User, auth.currentUser.uid), {
+            favourite: arrayUnion(exercise)
+        })
+    } catch(err){
+        console.error(err);
+    }
+}
 
 export const getUser = async () => {
     try{
@@ -130,7 +162,3 @@ export const getTrainingPlan = async () => {
     }
 }
 
-
-onAuthStateChanged(auth, (user)=>{
-    
-})
