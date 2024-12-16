@@ -24,7 +24,8 @@ import {
     query, 
     where, 
     Timestamp, 
-    arrayUnion 
+    arrayUnion,
+    arrayRemove
 } from "firebase/firestore";
 import { useState } from "react";
 
@@ -132,6 +133,7 @@ export const addExercise = (data) => {
         .then(() => {
             console.log("Exercise added successfully");
         })
+
         .catch((err) => {
             console.error("Error adding exercise:", err);
         });
@@ -146,6 +148,63 @@ export const addTraining = (data) => {
             console.error("Error adding training:", err);
         });
 };
+
+export const removeFavourites = async (exerciseName) => {
+    try {
+      const userDocRef = doc(db, "User", auth.currentUser.uid);
+  
+      await updateDoc(userDocRef, {
+        favourite: arrayRemove(exerciseName)
+      });
+    } catch (err) {
+      console.error("Error removing from favourites:", err);
+    }
+  };
+
+export const getUser = async () => {
+    try{
+        const data = await getDoc(doc(db, 'User', auth.currentUser.uid));
+        console.log("User data");
+        console.log(data.data());
+        return data.data();
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const getExercises = async () => {
+    try{
+        const data = await getDocs(Exercise);
+        const dataReturn = [];
+        data.forEach((doc)=>{
+            dataReturn.push(doc.data());
+        })
+        console.log("Exer");
+        console.log(dataReturn);
+        return dataReturn;
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const getTraining = async () => {
+    try{
+        const data = await getDocs(Training);
+        return data.data();
+    } catch(err){
+        console.error(err);
+    }
+}
+
+export const getTrainingPlan = async () => {
+    try{
+        const data = await getDocs(TrainingPlan);
+        return data.data();
+    } catch(err){
+        console.error(err);
+    }
+}
+
 
 export const addTrainingPlan = (data) => {
     return addDoc(doc(TrainingPlan), data)
