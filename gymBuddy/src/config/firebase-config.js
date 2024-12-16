@@ -161,50 +161,6 @@ export const removeFavourites = async (exerciseName) => {
     }
   };
 
-export const getUser = async () => {
-    try{
-        const data = await getDoc(doc(db, 'User', auth.currentUser.uid));
-        console.log("User data");
-        console.log(data.data());
-        return data.data();
-    } catch(err){
-        console.error(err);
-    }
-}
-
-export const getExercises = async () => {
-    try{
-        const data = await getDocs(Exercise);
-        const dataReturn = [];
-        data.forEach((doc)=>{
-            dataReturn.push(doc.data());
-        })
-        console.log("Exer");
-        console.log(dataReturn);
-        return dataReturn;
-    } catch(err){
-        console.error(err);
-    }
-}
-
-export const getTraining = async () => {
-    try{
-        const data = await getDocs(Training);
-        return data.data();
-    } catch(err){
-        console.error(err);
-    }
-}
-
-export const getTrainingPlan = async () => {
-    try{
-        const data = await getDocs(TrainingPlan);
-        return data.data();
-    } catch(err){
-        console.error(err);
-    }
-}
-
 
 export const addTrainingPlan = (data) => {
     return addDoc(doc(TrainingPlan), data)
@@ -231,7 +187,7 @@ export const addFavourites = (exercise) => {
 export const getUser = () => {
     return getDoc(doc(db, 'User', auth.currentUser.uid))
         .then((data) => {
-            console.log("User data retrieved:", data.data());
+            console.log("User data retrieved:");
             return data.data();
         })
         .catch((err) => {
@@ -246,7 +202,7 @@ export const getExercises = () => {
             data.forEach((doc) => {
                 dataReturn.push(doc.data());
             });
-            console.log("Exercises retrieved successfully:", dataReturn);
+            console.log("Exercises retrieved successfully:");
             return dataReturn;
         })
         .catch((err) => {

@@ -125,15 +125,21 @@ function Auth() {
                 </label>
                 </div>
             </div>
+            <div className="auth-btn-container">
+                <button className="auth-btn login-btn" onClick={() => {handleRegister()}}>
+                    Log in
+                </button>
+            </div>
             </>
             }
+            
+            {!register &&
+            <>
             <div className="auth-btn-container">
                 <button className="auth-btn login-btn" onClick={() => {logIn(email, password, navigate)}}>
                     Log in
                 </button>
             </div>
-            {!register &&
-            <>
             <div className="google-btn-container">
                 <button className="google-btn" onClick={() => {signInWithGoogle(navigate)}}>
                     <img className="googleImage" src = "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1200px-Google_%22G%22_logo.svg.png"/>
