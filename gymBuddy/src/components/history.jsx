@@ -1,16 +1,11 @@
 import { useState } from "react";
-import { getExercises, getUser } from "../config/firebase-config";
+import { getExercises, getUser, addExercise, addTraining } from "../config/firebase-config";
 
 function History(){
 
-    const [exercises, setExercises] = useState([]);
-    
-    const handleClick = async ()=>{
-        const ex = await getExercises();
-        setExercises(ex);
+    function handleClick() {
+        
     }
-
-    console.log(exercises);
 
     return(
         <>

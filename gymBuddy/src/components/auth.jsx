@@ -11,7 +11,7 @@ function Auth() {
     const [age, setAge] = useState(0);
     const [height, setHeight] = useState(0);
     const [weight, setWeight] = useState(0);
-    const [gender, setGender] = useState(0);
+    const [gender, setGender] = useState('');
 
     const navigate = useNavigate();
 
@@ -117,7 +117,7 @@ function Auth() {
                     type="radio"
                     name="gender"
                     value="F"
-                    checked={gender==="M"}
+                    checked={gender==="F"}
                     onChange={(e) => setGender(e.target.value)}
                 />
                 <span className="auth-radio-custom"></span>
