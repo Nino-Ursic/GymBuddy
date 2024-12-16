@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 import {getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup, signOut, signInWithEmailAndPassword, onAuthStateChanged} from "firebase/auth";
 import { useAuth } from "../components/authContext";
 // Baza podataka 
-import { getFirestore, getDoc, getDocs, collection, setDoc, addDoc, deleteDoc, updateDoc, doc, query, where, Timestamp, arrayUnion } from "firebase/firestore";
+import { getFirestore, getDoc, getDocs, collection, setDoc, addDoc, deleteDoc, updateDoc, doc, query, where, Timestamp, arrayUnion, arrayRemove } from "firebase/firestore";
 import { useState } from "react";
 
 
@@ -122,9 +122,23 @@ export const addFavourites = async (exercise) => {
     }
 }
 
+export const removeFavourites = async (exerciseName) => {
+    try {
+      const userDocRef = doc(db, "User", auth.currentUser.uid);
+  
+      await updateDoc(userDocRef, {
+        favourite: arrayRemove(exerciseName)
+      });
+    } catch (err) {
+      console.error("Error removing from favourites:", err);
+    }
+  };
+
 export const getUser = async () => {
     try{
         const data = await getDoc(doc(db, 'User', auth.currentUser.uid));
+        console.log("User data");
+        console.log(data.data());
         return data.data();
     } catch(err){
         console.error(err);
@@ -138,6 +152,8 @@ export const getExercises = async () => {
         data.forEach((doc)=>{
             dataReturn.push(doc.data());
         })
+        console.log("Exer");
+        console.log(dataReturn);
         return dataReturn;
     } catch(err){
         console.error(err);
