@@ -17,10 +17,12 @@ body {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
   width: 300px;
   text-align: center;
-  align-self: center;
-  margin-top: 18rem;
-}
 
+  position: absolute; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+}
 /* Container for the text and button */
 .register-btn-container {
   display: flex; 
