@@ -131,3 +131,110 @@
   padding: 0;
   margin: 0;
 }
+
+.details{
+  margin-top: 1rem;
+}
+
+/* Fullscreen Modal Overlay */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  margin-top: 3rem;
+}
+
+/* Fullscreen Modal Content */
+.modal-content {
+  background-color: #1a1a1a;
+  padding: 3rem;
+  border-radius: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+  width: 90%;
+  max-width: 90vw;
+  color: rgba(255, 255, 255, 0.87);
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+
+  max-height: calc(100vh - 5rem); 
+  overflow-y: auto;            
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+/* Title Styling */
+.modal-content h2 {
+  font-size: 2.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #f0f0f0;
+}
+
+/* Description Styling */
+.modal-content p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+  color: #d1d1d1;
+}
+
+/* Duration Highlight */
+.modal-content p:last-of-type {
+  font-weight: 500;
+  color: #a0c4ff;
+}
+
+/* Close Button */
+.close-button {
+  margin-top: 2rem;
+  padding: 0.8em 2em;
+  background-color: #ff4d4f;
+  color: #ffffff; 
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-button:hover {
+  background-color: #ff7875;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.training-container {
+  display: flex;
+  flex-wrap: wrap;            
+  justify-content: center;    
+  align-items: flex-start;    
+  gap: 2rem;                  
+
+  margin-top: 3rem;
+  padding: 20px;
+  max-width: 90vw;
+  max-height: calc(100vh - 5rem); 
+  overflow-y: auto;            
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+  background-color: #f4f4f400;     
+}
+
+

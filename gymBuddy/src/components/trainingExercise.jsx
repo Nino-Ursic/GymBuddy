@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { addFavourites, removeFavourites } from "../config/firebase-config";
 
-function ItemMain(props) {
+function TrainingExercise(props) {
 
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -21,17 +21,6 @@ function ItemMain(props) {
     setIsFavorite(!isFavorite);
   };
 
-  const formatMuscleGroup = (muscleGroup) => {
-    if (Array.isArray(muscleGroup) && muscleGroup.length > 0) {
-      return muscleGroup
-        .filter((mg) => mg.trim() !== "") 
-        .map((mg) => mg.charAt(0).toUpperCase() + mg.slice(1))
-        .join(" i ");
-    }
-    return "";
-  };
-
-  
   const formatExerciseName = (name) => {
     if (!name) return "";
     return name.charAt(0).toUpperCase() + name.slice(1);
@@ -44,29 +33,16 @@ function ItemMain(props) {
         <h3 className="exerciseNameItem">
           {formatExerciseName(props.exerciseName)}
         </h3>
+        </div>
+        <p>{`Measure: ${props.measure}`}</p>
+        <p>{`Repetition: ${props.repetition}`}</p>
+        <p>{`Sets: ${props.sets}`}</p>
 
-        <button
-          className="heart-icon"
-          onClick={handleFavoriteClick}
-          aria-label="Toggle Favorite"
-        >
-          {isFavorite ? (
-            <AiFillHeart size={24} color="red" />
-          ) : (
-            <AiOutlineHeart size={24} color="gray" />
-          )}
-        </button>
-      </div>
       
       
-      {formatMuscleGroup(props.muscleGroup) && (
-        <p className="muscleGroupItem">
-          {formatMuscleGroup(props.muscleGroup)}
-        </p>
-      )}
-      <p className="difficultyItem">{formatExerciseName(props.difficulty)}</p>
+      
     </div>
   );
 }
 
-export default ItemMain;
+export default TrainingExercise;

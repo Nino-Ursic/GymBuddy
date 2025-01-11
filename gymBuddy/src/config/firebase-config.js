@@ -124,7 +124,7 @@ export const addUser = (uid, data) => {
         })
         .catch((err) => {
             console.error("Error adding user to Firestore:", err);
-            throw err; // Propagate error
+            throw err; 
         });
 };
 
@@ -160,7 +160,6 @@ export const removeFavourites = async (exerciseName) => {
       console.error("Error removing from favourites:", err);
     }
   };
-
 
 export const addTrainingPlan = (data) => {
     return addDoc(doc(TrainingPlan), data)
