@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./home.css";
 import TrainingItem from "./trainingItem.jsx";
 import { getTraining, getUser } from "../config/firebase-config";
+import { auth } from '../config/firebase-config.js';
 
 function Training() {
   const [training, setTraining] = useState([]);  // Original exercises
@@ -10,6 +11,19 @@ function Training() {
   const [difficulty, setDifficulty] = useState(""); // Selected difficulty
   const [duration, setDuration] = useState(0);
   const [userFavourites, setUserFavourites] = useState(null);
+  
+  const [isLoading, setIsLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState(null);
+
+  useEffect(() => {
+      const unsubscribe = auth.onAuthStateChanged(user => {
+        setCurrentUser(user);
+        setIsLoading(false);
+      });
+  
+      // Cleanup the listener when the component is unmounted
+      return () => unsubscribe();
+    }, []);
 
   useEffect(() => {
     const fetchTraining = async () => {
@@ -36,10 +50,21 @@ function Training() {
     };
 
     fetchUser();
+
   }, []);
 
   useEffect(() => {
     let filteredItems = training;
+
+    
+      filteredItems = filteredItems.filter( (item) =>{
+        if(item.userId){
+          return(item.userId == auth.currentUser?.uid);
+        }else{
+          return true;
+        }
+      })
+    
 
     if (kategorija) {
       filteredItems = filteredItems.filter(

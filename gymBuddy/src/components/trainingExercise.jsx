@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { addFavourites, removeFavourites } from "../config/firebase-config";
 
 function TrainingExercise(props) {

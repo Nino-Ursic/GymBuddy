@@ -1,7 +1,6 @@
 import './App.css';
 import Auth from './components/auth';
 import Home from './components/home';
-import History from './components/history';
 import Settings from './components/settings';
 import Training from './components/training';
 import TrainingPlan from './components/trainingPlan';
@@ -12,6 +11,7 @@ import Navbar from './components/navbar';
 import ProtectedRoute from './components/protectedRoute';
 
 import { AuthProvider } from './components/authContext';
+import MyTraining from './components/myTraining';
 
 function App() {
 
@@ -26,7 +26,7 @@ function App() {
             <Route path='/training' element={<Training />} />
             <Route path='/trainingPlan' element={<TrainingPlan />} />
             <Route element={<ProtectedRoute />}>
-              <Route path='/history' element={<History />} />
+              <Route path='/myTraining' element={<MyTraining />} />
             </Route>
             <Route path='/settings' element={<Settings />} />
             <Route path='*' element={<h1>NOT FOUND</h1>} />

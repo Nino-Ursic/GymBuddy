@@ -7,7 +7,6 @@
   gap: 2rem;
   padding: 20px;
   max-width: 100%;
-  min-height: 100vh; 
   background-color: #f4f4f400;
   
 }
@@ -224,7 +223,7 @@
   display: flex;
   flex-wrap: wrap;            
   justify-content: center;    
-  align-items: flex-start;    
+  align-items: stretch;    
   gap: 2rem;                  
 
   margin-top: 3rem;
@@ -237,4 +236,9 @@
   background-color: #f4f4f400;     
 }
 
-
+.trainingPlan-container .item{
+  width: 20vw;       /* Set width relative to the viewport */
+  max-width: 35vw;   /* Optional: limit the maximum width */
+  box-sizing: border-box;
+  justify-content: flex-start;
+}
