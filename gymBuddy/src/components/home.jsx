@@ -9,6 +9,7 @@ function Home() {
   const [kategorija, setKategorija] = useState(""); // Selected category
   const [difficulty, setDifficulty] = useState(""); // Selected difficulty
   const [userFavourites, setUserFavourites] = useState(null);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const fetchExercises = async () => {
@@ -54,12 +55,31 @@ function Home() {
       );
     }
 
+    if(search){
+      filteredItems = filteredItems.filter(
+        (item) => item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
     setFilteredExercises(filteredItems); // Update filtered exercises
-  }, [kategorija, difficulty, exercises]); // This effect runs when filters or exercises change
+  }, [kategorija, difficulty, exercises, search]); // This effect runs when filters or exercises change
 
   return (
     <>
       <div className="filter-container spacing">
+        <label htmlFor="exercise-search" className="filter-label">
+          Search Exercises by Name:
+        </label>
+        <input
+          type="text"
+          id="exercise-search"
+          className="filter-dropdown"
+          placeholder="Enter exercise name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </div>
+      <div className="filter-container">
         <label htmlFor="category-select" className="filter-label">
           Filter by Category:
         </label>

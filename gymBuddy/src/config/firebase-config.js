@@ -162,7 +162,7 @@ export const removeFavourites = async (exerciseName) => {
   };
 
 export const addTrainingPlan = (data) => {
-    return addDoc(doc(TrainingPlan), data)
+    return addDoc(TrainingPlan, data)
         .then(() => {
             console.log("Training plan added successfully");
         })
