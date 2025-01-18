@@ -2,8 +2,8 @@ import "./home.css";
 import "./newTraining.css";
 import "./myTraining.css";
 import React, { useState, useEffect } from "react";
-import { auth, getTrainingPlan } from '../config/firebase-config.js';
-import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan } from '../config/firebase-config';
+import { auth, getTrainingPlan, removePlan } from '../config/firebase-config.js';
+import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan, updateTrainingPlanProgress } from '../config/firebase-config';
 
 
 function Training() {
@@ -129,6 +129,8 @@ function Training() {
     }
   };
 
+  
+
   const handlePlanChange = (e) => {
     setSelectedPlan(e.target.value);
   }
@@ -177,10 +179,72 @@ function Training() {
       console.error("Error removing training:", error);
     }
   };
+
+  const completeTraining = async (tp, training) => {
+    
+    const completedTraining = {
+      date: new Date(),
+      trainingName: training
+    };
+
+    try {
+      await updateTrainingPlanProgress(tp.name, tp.progress+1);
+      console.log('Training Submitted:');
+      fetchPlans();
+      fetchMyPlans();
+    } catch (error) {
+      console.error('Error submitting training:', error);
+    }
+    if(training != "Rest day"){
+    try {
+      await addTrainingHistory(completedTraining);
+      console.log('Training Submitted:');
+      fetchTrainings();
+      fetchHistory();
+    } catch (error) {
+      console.error('Error submitting training:', error);
+    }
+    }
+  }
+
+  const handleNext = async (tp) => {
+
+    try {
+      await updateTrainingPlanProgress(tp.name, tp.progress+1);
+      fetchPlans();
+      fetchMyPlans();
+      console.log('progress changed:');
+    } catch (error) {
+      console.error('Error progress change:', error);
+    }
+  }
+
+  const handlePrev = async (tp) => {
+    try {
+      await updateTrainingPlanProgress(tp.name, tp.progress-1);
+      fetchPlans();
+      fetchMyPlans();
+      console.log('progress changed:');
+    } catch (error) {
+      console.error('Error progress change:', error);
+    }
+  }
+
+  const removeTrainingPlan = async (tp) => {
+    const rPlan = {
+      name: tp.name,
+      progress: tp.progress
+    };
   
-
-
-
+    try {
+      await removePlan(rPlan);
+      console.log('Plan removed:');
+      fetchPlans();
+      fetchMyPlans();
+    } catch (error) {
+      console.error('Error removing training plan:', error);
+    }
+  }
   
   return (
     <>
@@ -222,11 +286,32 @@ function Training() {
                 </div>
                 )}
               </div>
-              {trainingPlans.map((tp) => (
-                <p>p</p>
+              {myPlans.map((tp) => (
+                <div className="completed-trainings-container">
+                <div className="trainingPlan-title">
+                  <h2>{tp.name}</h2>
+                  <button type="button" className="remove" onClick={() => removeTrainingPlan(tp)}>Remove</button>
+                </div>
+                <div className="plan-navigation">
+                  <h3>Day: {tp.progress+1}</h3>
+                  <button type="button" className="submit-training" onClick={() => handlePrev(tp)}>Prev</button>
+                  <button type="button" className="submit-training" onClick={() => handleNext(tp)}>Next</button>
+                </div>
+                <p>Upcoming trainings:</p>
+                <div className="completed-trainings">
+                  {trainingPlans.find(plan => plan.name === tp.name).trainings.map((training, index) => (
+                    <>{ index >= tp.progress &&
+                    <div key={index} className="item">
+                      <h4>{`${index+1}. ${training}`}</h4>
+                      {index == tp.progress && <button type="button" className="submit-training complete" onClick={() => completeTraining(tp, training)}>Complete</button>}
+                    </div>
+                    }</>
+                  ))}
+                </div>
+              </div>
               ))
               }
-              <div className="completed-trainings-container">
+              <div className="completed-trainings-container history">
                 <h2>Completed</h2>
                 <div className="new-trainingPlan">
                   {auth.currentUser && <button className="filter-dropdown" onClick={openModalT}>+ Add training</button>}

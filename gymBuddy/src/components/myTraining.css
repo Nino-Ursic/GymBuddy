@@ -36,7 +36,10 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
     color: rgba(255, 255, 255, 0.87);
     font-family: 'Poppins', sans-serif;
-    height: 53vh;
+    height: 65vh;
+}
+.completed-trainings-container.history{
+    height: 55vh;
 }
 
 .completed-trainings-container > *{
@@ -60,8 +63,9 @@
 }
 .completed-trainings .item{
     height: 80%;
-    margin-bottom: 4%;
+    margin: 2% 0;
 }
+
 
 .trainingPlans{
     display: flex;
@@ -119,4 +123,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.submit-training.complete{
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
+}
+
+.plan-navigation{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 35%;
+}
+
+.plan-navigation .submit-training{
+    margin: 0;
+    width: 30%;
+    padding: 0.75rem 1.0rem;
+}
+
+.trainingPlan-title{
+    display: flex;
+    width: 95%;
+    justify-content: space-between;
+}
+.trainingPlan-title .remove{
+    margin: 0;
 }

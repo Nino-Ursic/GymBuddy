@@ -199,6 +199,18 @@ export const addNewPlan = (plan) => {
         });
 };
 
+export const removePlan = (plan) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        trainingPlans: arrayRemove(plan)
+    })
+        .then(() => {
+            console.log("Training removed successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error removing training to history:", err);
+        });
+};
+
 export const addTrainingPlan = (data) => {
     return addDoc(TrainingPlan, data)
         .then(() => {
@@ -329,3 +341,37 @@ export const changePassword = async (currentPassword, newPassword) => {
       alert(`Error changing password: ${error.message}`);
     }
   };
+
+
+export const updateTrainingPlanProgress = async (trainingName, newProgress) => {
+    try {
+      const userDocRef = doc(User, auth.currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+  
+        // Update the progress for the matching training plan
+        const updatedTrainingPlans = userData.trainingPlans.map((plan) => {
+          if (plan.name === trainingName) {
+            return { ...plan, progress: newProgress };
+          }
+          return plan;
+        });
+  
+        // Save the updated array back to Firestore
+        await updateDoc(userDocRef, {
+          trainingPlans: updatedTrainingPlans,
+        });
+  
+        console.log(`Progress for '${trainingName}' updated to ${newProgress}%`);
+      } else {
+        console.error("User document does not exist.");
+        alert("User data not found.");
+      }
+    } catch (error) {
+      console.error("Error updating training progress:", error);
+      alert(`Error updating progress: ${error.message}`);
+    }
+  };
+  
