@@ -36,7 +36,7 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
     color: rgba(255, 255, 255, 0.87);
     font-family: 'Poppins', sans-serif;
-    height: 65vh;
+    height: 59vh;
 }
 .completed-trainings-container.history{
     height: 55vh;
@@ -56,14 +56,18 @@
     width: 95%;
     height: 35vh;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-evenly;
     align-items: center;
     gap: 2%;
+    flex-direction: column;
 }
 .completed-trainings .item{
-    height: 80%;
+    height: 90%;
     margin: 2% 0;
+    width: 90%;
+}
+.completed-trainings .item h4, .completed-trainings .item p{
+    margin: 1% auto;
 }
 
 
@@ -152,3 +156,8 @@
 .trainingPlan-title .remove{
     margin: 0;
 }
+.weight-chart{
+    height: 600px;
+    width: auto;
+}
+  

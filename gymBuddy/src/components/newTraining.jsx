@@ -8,7 +8,7 @@ const NewTraining = (props) => {
   const [training, setTraining] = useState({
     name: '',
     description: '',
-    duration: null,
+    duration: 0,
     exercises: [{ exerciseName: '', measure: '', repetition: 0, sets: 0 }],
     muscleGroup: [],
     difficulty: '',
@@ -24,7 +24,10 @@ const NewTraining = (props) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTraining({ ...training, [name]: value });
+    setTraining({
+      ...training,
+      [name]: name === 'duration' ? parseInt(value) : value
+    });
   };
 
   const handleExerciseChange = (index, e) => {
@@ -71,7 +74,7 @@ const NewTraining = (props) => {
     const updatedTraining = { ...training, userId: auth.currentUser?.uid };
     try {
       await addTraining(updatedTraining);
-      console.log('Training Submitted:', updatedTraining);
+      console.log('Training Submitted:');
       props.closeWindow();
       props.fetch();
     } catch (error) {

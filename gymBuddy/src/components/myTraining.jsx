@@ -1,12 +1,108 @@
 import "./home.css";
 import "./newTraining.css";
 import "./myTraining.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { auth, getTrainingPlan, removePlan } from '../config/firebase-config.js';
 import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan, updateTrainingPlanProgress } from '../config/firebase-config';
 
+import { Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function Training() {
+
+  const [weightsData, setWeightsData] = useState([]); // State for weights data
+  const [weightsDates, setWeightsDates] = useState([]); // State for weight timestamps
+
+
+  const data = {
+    labels: weightsDates,
+    datasets: [
+      {
+        label: 'Weight',
+        data: weightsData,
+        fill: true,
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        tension: 0.4,
+        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+        pointBorderColor: '#fff',
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top',
+        labels: {
+          color: '#f0f0f0', // Light color for legend text
+        },
+      },
+      title: {
+        display: true,
+        text: 'Weight progress',
+        font: {
+          size: 18,
+          weight: 'bold',
+        },
+        color: '#f0f0f0', // Light color for title text
+      },
+      tooltip: {
+        backgroundColor: '#333', // Dark background for tooltips
+        titleColor: '#fff', // Light color for tooltip title
+        bodyColor: '#fff', // Light color for tooltip body
+        cornerRadius: 4,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          color: '#f0f0f0', // Light color for x-axis ticks
+          font: {
+            weight: 'bold', // Make x-axis labels bold
+          },
+        },
+      },
+      y: {
+        grid: {
+          color: '#e0e0e0', // Lighter grid lines in the background
+        },
+        ticks: {
+          beginAtZero: true,
+          color: '#f0f0f0', // Light color for y-axis ticks
+        },
+      },
+    },
+    backgroundColor: '#2e003e', // Dark purple background for the chart
+  };
+  
+  
+
   const [trainings, setTrainings] = useState([]);
   const [selectedTraining, setSelectedTraining] = useState("");
   const [history, setHistory] = useState([]);
@@ -15,10 +111,14 @@ function Training() {
   const [selectedPlan, setSelectedPlan] = useState("");
   const [myPlans, setMyPlans] = useState([]);
   
-  const [weight, setWeight] = useState([]);
+  const [weights, setWeights] = useState([]);
 
   const [isModalOpenTP, setIsModalOpenTP] = useState(false);
   const [isModalOpenT, setIsModalOpenT] = useState(false);
+
+  
+
+  const chartRef = useRef(null);
     
     
   const openModalTP = () => setIsModalOpenTP(true);
@@ -87,6 +187,25 @@ function Training() {
       console.error('Error fetching trainings:', error);
     }
   }
+
+  const fetchWeights = async () => {
+    try {
+      const user = await getUser();
+      const weights = user.weight;
+      
+      // Separate weights and dates into different states
+      const weightsArray = weights?.map(weight => weight.weight);
+      
+      const datesArray = weights?.map(weight => weight.date.toDate().toLocaleDateString());
+      console.log("EVO GA", datesArray);
+      setWeightsData(weightsArray);
+      setWeightsDates(datesArray);
+    } catch (error) {
+      console.error('Error fetching weights:', error);
+    }
+  };
+
+  
   
 
   useEffect(() => {
@@ -95,8 +214,10 @@ function Training() {
     fetchTrainings();
     fetchPlans();
     fetchMyPlans();
+    fetchWeights();
 
   }, [])
+  
 
   const handleTrainingChange = (e) => {
     setSelectedTraining(e.target.value);
@@ -220,6 +341,7 @@ function Training() {
   }
 
   const handlePrev = async (tp) => {
+    if(tp.progress <= 0){ return;}
     try {
       await updateTrainingPlanProgress(tp.name, tp.progress-1);
       fetchPlans();
@@ -245,7 +367,7 @@ function Training() {
       console.error('Error removing training plan:', error);
     }
   }
-  
+
   return (
     <>
         <div className="myTraining-container spacing">
@@ -299,13 +421,12 @@ function Training() {
                 </div>
                 <p>Upcoming trainings:</p>
                 <div className="completed-trainings">
-                  {trainingPlans.find(plan => plan.name === tp.name).trainings.map((training, index) => (
-                    <>{ index >= tp.progress &&
+                  {trainingPlans?.find(plan => plan?.name === tp?.name)?.trainings?.map((training, index) => (
+                    index >= tp.progress &&
                     <div key={index} className="item">
                       <h4>{`${index+1}. ${training}`}</h4>
                       {index == tp.progress && <button type="button" className="submit-training complete" onClick={() => completeTraining(tp, training)}>Complete</button>}
                     </div>
-                    }</>
                   ))}
                 </div>
               </div>
@@ -367,7 +488,7 @@ function Training() {
 
                 </div>
                 <div className="weight-chart">
-
+                <Line data={data} options={options} />
                 </div>
                 <div className="trainings-number">
 

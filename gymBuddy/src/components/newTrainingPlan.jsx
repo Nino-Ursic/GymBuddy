@@ -38,7 +38,10 @@ const NewTrainingPlan = (props) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setTrainingPlan({ ...trainingPlan, [name]: value });
+    setTrainingPlan({
+      ...trainingPlan,
+      [name]: name === 'duration' ? parseInt(value) : value
+    });
   };
 
   const handleTrainingSelect = (e) => {
@@ -46,7 +49,7 @@ const NewTrainingPlan = (props) => {
     setSelectedTraining(value);
 
     if (availableTrainings.some(training => training.name.toLowerCase() === value.toLowerCase()) || value === "Rest Day") {
-      if (!trainingPlan.trainings.includes(value) && value !== "") {
+      if (value !== "") {
         setTrainingPlan({
           ...trainingPlan,
           trainings: [...trainingPlan.trainings, value]

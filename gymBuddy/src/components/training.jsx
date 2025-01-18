@@ -32,8 +32,17 @@ function Training() {
     const fetchTraining = async () => {
       try {
         const ex = await getTraining();
-        setTraining(ex);
-        setFilteredTraining(ex); // Initially set filteredExercises to all exercises
+
+        const filtered = ex.filter( (item) =>{
+          if(item.userId){
+            return(item.userId == auth.currentUser?.uid);
+          }else{
+            return true;
+          }
+        })
+
+        setTraining(filtered);
+        setFilteredTraining(filtered); // Initially set filteredExercises to all exercises
       } catch (error) {
         console.error("Error fetching training:", error);
       }
@@ -57,15 +66,6 @@ function Training() {
 
   useEffect(() => {
     let filteredItems = training;
-
-    
-      filteredItems = filteredItems.filter( (item) =>{
-        if(item.userId){
-          return(item.userId == auth.currentUser?.uid);
-        }else{
-          return true;
-        }
-      })
     
 
     if (kategorija) {
@@ -87,8 +87,10 @@ function Training() {
         filteredItems = filteredItems
       }else{
       filteredItems = filteredItems.filter(
-        (item) => item.duration <= duration
-      );
+        (item) => {
+          return item.duration <= duration
+        }
+        );
     }}
 
     if(search){
