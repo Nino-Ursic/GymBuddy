@@ -2,16 +2,21 @@ import "./home.css";
 import "./newTraining.css";
 import "./myTraining.css";
 import React, { useState, useEffect } from "react";
-import { auth } from '../config/firebase-config.js';
-import { getTraining, addTrainingHistory, removeTrainingHistory, getUser } from '../config/firebase-config';
+import { auth, getTrainingPlan } from '../config/firebase-config.js';
+import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan } from '../config/firebase-config';
 
 
 function Training() {
   const [trainings, setTrainings] = useState([]);
   const [selectedTraining, setSelectedTraining] = useState("");
-  const [trainingPlans, setTrainingPlans] = useState([]);
   const [history, setHistory] = useState([]);
+
+  const [trainingPlans, setTrainingPlans] = useState([]);
+  const [selectedPlan, setSelectedPlan] = useState("");
+  const [myPlans, setMyPlans] = useState([]);
+  
   const [weight, setWeight] = useState([]);
+
   const [isModalOpenTP, setIsModalOpenTP] = useState(false);
   const [isModalOpenT, setIsModalOpenT] = useState(false);
     
@@ -55,13 +60,41 @@ function Training() {
     }
   }
   
-  
+  const fetchPlans = async () => {
+    try {
+      const plans = await getTrainingPlan();
+      const filteredItems = plans.filter( (item) =>{
+              if(item.userId){
+                return(item.userId == auth.currentUser?.uid);
+              }else{
+                return true;
+              }
+            })
+      setTrainingPlans(filteredItems);
+    } catch (error) {
+      console.error('Error fetching trainings:', error);
+    }
+  }
+
+  const fetchMyPlans = async () => {
+    try {
+      const user = await getUser();
+      
+      const temp = user.trainingPlans
+      
+      setMyPlans(temp);
+    } catch (error) {
+      console.error('Error fetching trainings:', error);
+    }
+  }
   
 
   useEffect(() => {
 
     fetchHistory();
     fetchTrainings();
+    fetchPlans();
+    fetchMyPlans();
 
   }, [])
 
@@ -92,9 +125,40 @@ function Training() {
       setSelectedTraining("");
       fetchHistory();
     } catch (error) {
-      console.error('Error submitting training plan:', error);
+      console.error('Error submitting training:', error);
     }
   };
+
+  const handlePlanChange = (e) => {
+    setSelectedPlan(e.target.value);
+  }
+
+  const handlePlanSubmit = async (e) => {
+    e.preventDefault();
+  
+    const PlanExists = trainingPlans.some(plan => plan.name === selectedPlan);
+  
+    if (!PlanExists) {
+      alert("Please select a valid training from the options.");
+      return;
+    }
+  
+    const newPlan = {
+      name: selectedPlan,
+      progress: 0,
+    };
+  
+    try {
+      await addNewPlan(newPlan);
+      console.log('Plan Submitted:');
+      closeModalTP();
+      fetchPlans();
+      setSelectedPlan("");
+      fetchMyPlans();
+    } catch (error) {
+      console.error('Error submitting training plan:', error);
+    }
+  }
   
 
   const removeTraining = async (training) => {
@@ -133,13 +197,35 @@ function Training() {
                   <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                     <h2>New Training Plan</h2>
                     <div className="training-container">
+                    <form onSubmit={handlePlanSubmit} className="form-container">
+                        <div className="input-group">
+                          <label htmlFor="plan"><h3>Select training plan:</h3></label>
+                          <input
+                            type="text"
+                            id="plan"
+                            list="trainingPlan-options"
+                            value={selectedPlan}
+                            onChange={handlePlanChange}
+                            placeholder="Type or select a training"
+                          />
+                          <datalist id="trainingPlan-options">
+                            {trainingPlans.map((plan) => (
+                              <option key={`${plan.id}${plan.name}`} value={plan.name} />
+                            ))}
+                          </datalist>
+                        </div>
+                        <button type="submit" className="submit-training">Submit training plan</button>
+                      </form>
                     </div>
                     <button className="close-button" onClick={closeModalTP}>Back</button>
                   </div>
                 </div>
                 )}
               </div>
-              
+              {trainingPlans.map((tp) => (
+                <p>p</p>
+              ))
+              }
               <div className="completed-trainings-container">
                 <h2>Completed</h2>
                 <div className="new-trainingPlan">

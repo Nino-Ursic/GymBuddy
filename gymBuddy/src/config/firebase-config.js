@@ -28,6 +28,8 @@ import {
     arrayRemove
 } from "firebase/firestore";
 import { useState } from "react";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -58,7 +60,7 @@ export const signIn = (email, password, navigate, data) => {
                 isAdmin: false,
                 createdAt: Timestamp.fromDate(new Date()),
                 history: [],
-                trainingId: "",
+                trainingPlans: [],
                 email: user.email
             };
 
@@ -185,6 +187,18 @@ export const addTrainingHistory = (training) => {
         });
 };
 
+export const addNewPlan = (plan) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        trainingPlans: arrayUnion(plan)
+    })
+        .then(() => {
+            console.log("Training added successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error adding training to history:", err);
+        });
+};
+
 export const addTrainingPlan = (data) => {
     return addDoc(TrainingPlan, data)
         .then(() => {
@@ -260,3 +274,58 @@ export const getTrainingPlan = () => {
             console.error("Error retrieving training plans:", err);
         });
 };
+
+export const changeHeight = (h) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        height: h
+    })
+        .then(() => {
+            console.log("height updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating height :", err);
+        });
+};
+
+export const changeAge = (a) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        age: a
+    })
+        .then(() => {
+            console.log("age updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating age :", err);
+        });
+};
+export const changeUsername = (u) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        username: u
+    })
+        .then(() => {
+            console.log("username updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating username:", err);
+        });
+};
+
+export const changePassword = async (currentPassword, newPassword) => {
+    try {
+      const user = auth.currentUser;
+  
+      if (!user) {
+        throw new Error("No user is currently signed in.");
+      }
+  
+      const credential = EmailAuthProvider.credential(user.email, currentPassword);
+      await reauthenticateWithCredential(user, credential);
+  
+      await updatePassword(user, newPassword);
+      console.log("Password updated successfully.");
+      alert("Password updated successfully.");
+    } catch (error) {
+      console.error("Error changing password:", error.message);
+      alert(`Error changing password: ${error.message}`);
+    }
+  };
