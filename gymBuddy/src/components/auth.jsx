@@ -39,11 +39,47 @@ function Auth() {
                 height: height,
                 weight: weight,
                 gender: gender
+            };
+            
+            if (username.trim() === "") {
+                alert("Username cannot be empty");
+                return; 
             }
+            
+            if (age < 0 || age > 150) {
+                alert("Age must be between 0 and 150");
+                return; 
+            }
+            
+            if (height < 0 || height > 300) {
+                alert("Height must be between 0 and 300 cm");
+                return; 
+            }
+            if (password === "") {
+                alert("Password cannot be empty");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long");
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert("Email must contain '@'");
+                return;
+            }
+
+            if (gender === "") {
+                alert("Must choose gender");
+                return;
+            }
+            
             setUser(novi);
-            console.log(user);
+            console.log(user); 
             setRegister(false);
             signIn(email, password, navigate, {...novi});
+            
         }
     }
 
