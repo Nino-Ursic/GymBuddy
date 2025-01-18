@@ -10,7 +10,10 @@ function Auth() {
     const [username, setUsername] = useState("");
     const [age, setAge] = useState(0);
     const [height, setHeight] = useState(0);
-    const [weight, setWeight] = useState(0);
+    const [weight, setWeight] = useState({
+        date: null,
+        weight: 0
+    });
     const [gender, setGender] = useState('');
 
     const navigate = useNavigate();
@@ -21,7 +24,7 @@ function Auth() {
         username: '',
         age: 0,
         height: 0,
-        weight: 0,
+        weight: {},
         gender: ''
     })
     
@@ -42,6 +45,14 @@ function Auth() {
             setRegister(false);
             signIn(email, password, navigate, {...novi});
         }
+    }
+
+    function handleWeight(w){
+        const temp = {
+            date: new Date(),
+            weight: w
+        };
+        setWeight(temp);
     }
 
     return (
@@ -94,7 +105,7 @@ function Auth() {
                     className="auth-input"
                     type="number"
                     placeholder="Weight (kg)"
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => handleWeight(e.target.value)}
                 />
             </div>
             <div className="auth-input-container">

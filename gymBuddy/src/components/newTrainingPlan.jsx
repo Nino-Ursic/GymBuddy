@@ -21,7 +21,14 @@ const NewTrainingPlan = (props) => {
     const fetchTrainings = async () => {
       try {
         const trainings = await getTraining();
-        setAvailableTrainings(trainings);
+        const filteredItems = trainings.filter( (item) =>{
+                      if(item.userId){
+                        return(item.userId == auth.currentUser?.uid);
+                      }else{
+                        return true;
+                      }
+                    })
+        setAvailableTrainings(filteredItems);
       } catch (error) {
         console.error('Error fetching trainings:', error);
       }

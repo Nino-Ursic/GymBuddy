@@ -161,16 +161,6 @@ export const removeFavourites = async (exerciseName) => {
     }
   };
 
-export const addTrainingPlan = (data) => {
-    return addDoc(TrainingPlan, data)
-        .then(() => {
-            console.log("Training plan added successfully");
-        })
-        .catch((err) => {
-            console.error("Error adding training plan:", err);
-        });
-};
-
 export const addFavourites = (exercise) => {
     return updateDoc(doc(User, auth.currentUser.uid), {
         favourite: arrayUnion(exercise)
@@ -182,6 +172,46 @@ export const addFavourites = (exercise) => {
             console.error("Error adding favourite exercise:", err);
         });
 };
+
+export const addTrainingHistory = (training) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        history: arrayUnion(training)
+    })
+        .then(() => {
+            console.log("Training added successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error adding training to history:", err);
+        });
+};
+
+export const addTrainingPlan = (data) => {
+    return addDoc(TrainingPlan, data)
+        .then(() => {
+            console.log("Training plan added successfully");
+        })
+        .catch((err) => {
+            console.error("Error adding training plan:", err);
+        });
+};
+
+export const removeTrainingHistory = async (training) => {
+    try {
+      const userDocRef = doc(db, "User", auth.currentUser.uid);
+  
+      await updateDoc(userDocRef, {
+        history: arrayRemove({
+          trainingName: training.trainingName,
+          date: training.date,
+        }),
+      });
+  
+      console.log("Training removed from history successfully");
+    } catch (err) {
+      console.error("Error removing from history:", err);
+    }
+  };
+
 
 export const getUser = () => {
     return getDoc(doc(db, 'User', auth.currentUser.uid))
