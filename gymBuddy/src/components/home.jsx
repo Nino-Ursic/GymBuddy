@@ -70,8 +70,8 @@ function Home() {
       );
     }
 
-    setFilteredExercises(filteredItems); // Update filtered exercises
-  }, [kategorija, difficulty, exercises, search]); // This effect runs when filters or exercises change
+    setFilteredExercises(filteredItems); 
+  }, [kategorija, difficulty, exercises, search]); 
 
   return (
     <>

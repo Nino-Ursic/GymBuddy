@@ -24,7 +24,7 @@ function Auth() {
         username: '',
         age: 0,
         height: 0,
-        weight: {},
+        weight: [],
         gender: ''
     })
     
@@ -37,7 +37,7 @@ function Auth() {
                 username: username,
                 age: age,
                 height: height,
-                weight: weight,
+                weight: [weight],
                 gender: gender
             };
             
