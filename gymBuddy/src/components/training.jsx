@@ -19,15 +19,7 @@ function Training() {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  useEffect(() => {
-      const unsubscribe = auth.onAuthStateChanged(user => {
-        setCurrentUser(user);
-        setIsLoading(false);
-      });
   
-      // Cleanup the listener when the component is unmounted
-      return () => unsubscribe();
-    }, []);
 
     const fetchTraining = async () => {
       try {

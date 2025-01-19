@@ -28,7 +28,9 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path='/myTraining' element={<MyTraining />} />
             </Route>
-            <Route path='/settings' element={<Settings />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path='/settings' element={<Settings />} />
+            </Route>
             <Route path='*' element={<h1>NOT FOUND</h1>} />
           </Route>
         </Routes>
