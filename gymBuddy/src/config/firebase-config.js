@@ -369,3 +369,34 @@ export const updateTrainingPlanProgress = async (trainingName, newProgress) => {
     }
   };
   
+
+export const updateExercise = async (oldExercise, exercise) => {
+    const exercisesRef = Exercise;
+
+    const q = query(exercisesRef, where("name", "==", oldExercise.name));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docSnapshot = querySnapshot.docs[0];  
+      const docId = docSnapshot.id;
+
+      const exerciseDocRef = doc(db, "Exercise", docId);
+
+      await updateDoc(exerciseDocRef, {
+        name: exercise.name,
+        description: exercise.description,
+        muscleGroup: exercise.muscleGroup,
+        difficulty: exercise.difficulty,
+        pictureURL: exercise.pictureURL
+      });
+
+      console.log("Exercise updated successfully!");
+    } else {
+      console.log("No matching exercise found!");
+    }
+  } catch (error) {
+    console.error("Error updating exercise:", error);
+  }
+};

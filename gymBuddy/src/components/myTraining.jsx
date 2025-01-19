@@ -193,7 +193,6 @@ function Training() {
       const user = await getUser();
       const weights = user.weight;
       
-      // Separate weights and dates into different states
       const weightsArray = weights?.map(weight => weight.weight);
       
       const datesArray = weights?.map(weight => weight.date.toDate().toLocaleDateString());

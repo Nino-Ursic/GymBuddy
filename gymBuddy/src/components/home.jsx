@@ -2,39 +2,48 @@ import React, { useState, useEffect } from "react";
 import "./home.css";
 import ItemMain from "./itemMain.jsx";
 import { getExercises, getUser } from "../config/firebase-config";
+import { auth } from "../config/firebase-config";
+import NewExercise from "./newExercise.jsx";
 
 function Home() {
-  const [exercises, setExercises] = useState([]);  // Original exercises
-  const [filteredExercises, setFilteredExercises] = useState([]);  // Filtered exercises
-  const [kategorija, setKategorija] = useState(""); // Selected category
-  const [difficulty, setDifficulty] = useState(""); // Selected difficulty
+  const [exercises, setExercises] = useState([]);  
+  const [filteredExercises, setFilteredExercises] = useState([]);  
+  const [kategorija, setKategorija] = useState(""); 
+  const [difficulty, setDifficulty] = useState(""); 
   const [userFavourites, setUserFavourites] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
   const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
+  const fetchExercises = async () => {
+    try {
+      const ex = await getExercises();
+      setExercises(ex);
+      setFilteredExercises(ex); 
+    } catch (error) {
+      console.error("Error fetching exercises:", error);
+    }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const user = await getUser();
+      console.log(user);
+      console.log(user.favourite);
+      setUserFavourites(user.favourite);
+      setIsAdmin(user.isAdmin);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchExercises = async () => {
-      try {
-        const ex = await getExercises();
-        setExercises(ex);
-        setFilteredExercises(ex); // Initially set filteredExercises to all exercises
-      } catch (error) {
-        console.error("Error fetching exercises:", error);
-      }
-    };
 
     fetchExercises();
-
-    const fetchUser = async () => {
-      try {
-        const user = await getUser();
-        console.log(user);
-        console.log(user.favourite);
-        setUserFavourites(user.favourite);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
     fetchUser();
   }, []);
 
@@ -121,14 +130,28 @@ function Home() {
           <option value="hard">Hard Difficulty</option>
         </select>
       </div>
+      <div className="filter-container">
+        {auth.currentUser && isAdmin && <button className="filter-dropdown details" onClick={openModal}>+ Add exercise</button>}
+        {isModalOpen && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>New Training</h2>
+            <div className="training-container">
+                <NewExercise closeWindow={closeModal} fetch={fetchExercises}></NewExercise>
+            </div>
+            <button className="close-button" onClick={closeModal}>Back</button>
+          </div>
+        </div>
+      )}
+      </div>
       <div className="home-container">
         {filteredExercises.map((exercise) => (
           <ItemMain
-            key={exercise.id || exercise.name} // Use unique key
-            exerciseName={exercise.name}
-            difficulty={exercise.difficulty}
-            muscleGroup={exercise.muscleGroup}
+            key={exercise.id || exercise.name}
             favourites={userFavourites}
+            fetch = {fetchExercises}
+            isAdmin = {isAdmin}
+            exercise = {exercise}
           />
         ))}
       </div>
