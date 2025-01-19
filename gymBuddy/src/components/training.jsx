@@ -14,6 +14,7 @@ function Training() {
   const [userFavourites, setUserFavourites] = useState(null);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
 
   const openModal = () => setIsModalOpen(true);
@@ -47,6 +48,7 @@ function Training() {
       try {
         const user = await getUser();
         setUserFavourites(user.favourite);
+        setIsAdmin(user.isAdmin);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -190,6 +192,9 @@ function Training() {
             description={training.description}
             favourites={userFavourites}
             exercises={training.exercises}
+            isAdmin = {isAdmin}
+            fetch = {fetchTraining}
+            training = {training}
           />
         ))}
       </div>

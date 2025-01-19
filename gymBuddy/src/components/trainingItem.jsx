@@ -2,15 +2,20 @@ import { useEffect, useState } from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { addFavourites, removeFavourites } from "../config/firebase-config";
 import TrainingExercise from "./trainingExercise.jsx";
+import { auth } from "../config/firebase-config";
+import EditTraining from "./EditTraining.jsx";
 
 function TrainingItem(props) {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isModalOpenEdit, setIsModalOpenEdit] = useState(false);
+  
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+  const openModalEdit = () => setIsModalOpenEdit(true);
+  const closeModalEdit = () => setIsModalOpenEdit(false);
 
   useEffect(() => {
     if (props.favourites && props.favourites.includes(props.trainingName)) {
@@ -65,7 +70,8 @@ function TrainingItem(props) {
         </button>
       </div>
       
-      
+      <div className="title-container">
+        <div className="exercise-details">
       {formatMuscleGroup(props.muscleGroup) && (
         <p className="muscleGroupItem">
           {formatMuscleGroup(props.muscleGroup)}
@@ -74,7 +80,21 @@ function TrainingItem(props) {
       <p className="difficultyItem">{formatTrainingName(props.difficulty)}</p>
 
       <button className="filter-dropdown details" onClick={openModal}>Details</button>
+      </div>
+      {auth.currentUser && props.isAdmin && <button className="edit training filter-dropdown details " onClick={openModalEdit}>Edit</button>}
+      </div>
     </div>
+    {isModalOpenEdit && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>New Training</h2>
+            <div className="training-container">
+                <EditTraining closeWindow={closeModalEdit} fetch={props.fetch} training={props.training}></EditTraining>
+            </div>
+            <button className="close-button" onClick={closeModalEdit}>Back</button>
+          </div>
+        </div>
+      )}
     {isModalOpen && (
         <div className="modal-overlay" onClick={closeModal}>
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>

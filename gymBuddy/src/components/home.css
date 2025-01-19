@@ -57,6 +57,10 @@
   overflow: visible;
 }
 
+.title-container .edit.training{
+  height: 50%;
+}
+
 .heart-icon {
   background: none;
   border: none;

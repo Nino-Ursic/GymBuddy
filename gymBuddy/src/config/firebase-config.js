@@ -400,3 +400,36 @@ export const updateExercise = async (oldExercise, exercise) => {
     console.error("Error updating exercise:", error);
   }
 };
+
+export const updateTraining = async (oldTraining, training) => {
+    const trainingRef = Training;
+
+    const q = query(trainingRef, where("name", "==", oldTraining.name));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docSnapshot = querySnapshot.docs[0];  
+      const docId = docSnapshot.id;
+
+      const trainingDocRef = doc(db, "Training", docId);
+
+      await updateDoc(trainingDocRef, {
+        name: training.name,
+        description: training.description,
+        muscleGroup: training.muscleGroup,
+        difficulty: training.difficulty,
+        duration: training.duration,
+        exercises: training.exercises,
+        userId: training.userId
+      });
+
+      console.log("Training updated successfully!");
+    } else {
+      console.log("No matching training found!");
+    }
+  } catch (error) {
+    console.error("Error updating training:", error);
+  }
+};
