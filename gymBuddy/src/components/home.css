@@ -48,6 +48,15 @@
   width: 100%;
 }
 
+.title-container .edit{
+  margin: auto 0%;
+  aspect-ratio: 1.5 / 1;
+  height: 90%; /* Set the height */
+  width: auto; /* Keeps the aspect ratio unless overridden by content */
+  min-width: max-content; /* Ensures it grows to fit content if necessary */
+  overflow: visible;
+}
+
 .heart-icon {
   background: none;
   border: none;
@@ -56,6 +65,11 @@
   transition: transform 0.2s ease;
 }
 
+.exercise-details{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 
 /* Title of Exercise */
 .item h3 {
@@ -141,7 +155,8 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh; 
+  height: auto;
   background: rgba(0, 0, 0, 0.8);
   backdrop-filter: blur(8px);
   display: flex;
@@ -229,7 +244,7 @@
   margin-top: 3rem;
   padding: 20px;
   max-width: 90vw;
-  max-height: calc(100vh - 5rem); 
+  height: auto;
   overflow-y: auto;            
   box-sizing: border-box;
   scroll-behavior: smooth;

@@ -35,13 +35,13 @@
   
   /* Hover Effect */
   .nav-link:hover {
-    color: #f39c12;
+    color: #535bf2;
   }
   
   /* Active Link */
   .nav-link.active {
     font-weight: bold;
-    color: #f39c12;
+    color: #535bf2;
   }
   
   .navbar-btn {

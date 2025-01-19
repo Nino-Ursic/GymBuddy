@@ -3,16 +3,20 @@ import "./home.css";
 import TrainingPlanItem from "./trainingPlanItem.jsx";
 import { getTrainingPlan, getUser } from "../config/firebase-config";
 import { auth } from '../config/firebase-config.js';
+import NewTrainingPlan from "./newTrainingPlan.jsx";
 
 function TrainingPlan() {
   const [trainingPlans, setTrainingPlans] = useState([]);  // Original exercises
   const [filteredTrainingPlans, setFilteredTrainingPlans] = useState([]);  // Filtered exercises
   const [difficulty, setDifficulty] = useState(""); // Selected difficulty
-  const [duration, setDuration] = useState(0);
+  const [duration, setDuration] = useState(null);
   const [userFavourites, setUserFavourites] = useState(null);
+  const [search, setSearch] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const [isLoading, setIsLoading] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
+  
+    const openModal = () => setIsModalOpen(true);
+    const closeModal = () => setIsModalOpen(false);
 
   useEffect(() => {
       const unsubscribe = auth.onAuthStateChanged(user => {
@@ -24,7 +28,6 @@ function TrainingPlan() {
       return () => unsubscribe();
     }, []);
 
-  useEffect(() => {
     const fetchTrainingPlans = async () => {
       try {
         const ex = await getTrainingPlan();
@@ -35,13 +38,13 @@ function TrainingPlan() {
       }
     };
 
+  useEffect(() => {
+    
     fetchTrainingPlans();
 
     const fetchUser = async () => {
       try {
         const user = await getUser();
-        console.log(user);
-        console.log(user.favourite);
         setUserFavourites(user.favourite);
       } catch (error) {
         console.error("Error fetching user data:", error);
@@ -79,13 +82,29 @@ function TrainingPlan() {
       );
     }}
 
+    if(search){
+      filteredItems = filteredItems.filter(
+        (item) => item.name.toLowerCase().includes(search.toLowerCase())
+      );
+    }
+
     setFilteredTrainingPlans(filteredItems); // Update filtered exercises
-  }, [ difficulty, trainingPlans, duration]); // This effect runs when filters or exercises change
+  }, [ difficulty, trainingPlans, duration, search]); // This effect runs when filters or exercises change
 
   return (
     <>
       <div className="filter-container spacing">
-        
+        <label htmlFor="exercise-search" className="filter-label">
+          Search training plan by Name:
+        </label>
+        <input
+          type="text"
+          id="exercise-search"
+          className="filter-dropdown"
+          placeholder="Enter training plan name..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
       </div>
       <div className="filter-container">
         <label htmlFor="difficulty-select" className="filter-label">
@@ -116,6 +135,20 @@ function TrainingPlan() {
           onChange={(e)=> setDuration(e.target.value)}
           min="0"
         />
+      </div>
+      <div className="filter-container">
+        {auth.currentUser && <button className="filter-dropdown details" onClick={openModal}>+ Add training</button>}
+        {isModalOpen && (
+        <div className="modal-overlay" onClick={closeModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>New Training Plan</h2>
+            <div className="training-container">
+                <NewTrainingPlan closeWindow={closeModal} fetch={fetchTrainingPlans}></NewTrainingPlan>
+            </div>
+            <button className="close-button" onClick={closeModal}>Back</button>
+          </div>
+        </div>
+      )}
       </div>
       <div className="home-container">
         {filteredTrainingPlans.map((trainingPlan) => (

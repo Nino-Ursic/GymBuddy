@@ -10,7 +10,10 @@ function Auth() {
     const [username, setUsername] = useState("");
     const [age, setAge] = useState(0);
     const [height, setHeight] = useState(0);
-    const [weight, setWeight] = useState(0);
+    const [weight, setWeight] = useState({
+        date: null,
+        weight: 0
+    });
     const [gender, setGender] = useState('');
 
     const navigate = useNavigate();
@@ -21,7 +24,7 @@ function Auth() {
         username: '',
         age: 0,
         height: 0,
-        weight: 0,
+        weight: {},
         gender: ''
     })
     
@@ -36,12 +39,56 @@ function Auth() {
                 height: height,
                 weight: weight,
                 gender: gender
+            };
+            
+            if (username.trim() === "") {
+                alert("Username cannot be empty");
+                return; 
             }
+            
+            if (age < 0 || age > 150) {
+                alert("Age must be between 0 and 150");
+                return; 
+            }
+            
+            if (height < 0 || height > 300) {
+                alert("Height must be between 0 and 300 cm");
+                return; 
+            }
+            if (password === "") {
+                alert("Password cannot be empty");
+                return;
+            }
+
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long");
+                return;
+            }
+
+            if (!email.includes('@')) {
+                alert("Email must contain '@'");
+                return;
+            }
+
+            if (gender === "") {
+                alert("Must choose gender");
+                return;
+            }
+            
             setUser(novi);
-            console.log(user);
+            console.log(user); 
             setRegister(false);
             signIn(email, password, navigate, {...novi});
+            
         }
+    }
+
+    function handleWeight(w){
+        const temp = {
+            date: new Date(),
+            weight: w
+        };
+        setWeight(temp);
     }
 
     return (
@@ -94,7 +141,7 @@ function Auth() {
                     className="auth-input"
                     type="number"
                     placeholder="Weight (kg)"
-                    onChange={(e) => setWeight(e.target.value)}
+                    onChange={(e) => handleWeight(e.target.value)}
                 />
             </div>
             <div className="auth-input-container">

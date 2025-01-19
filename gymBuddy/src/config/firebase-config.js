@@ -28,6 +28,8 @@ import {
     arrayRemove
 } from "firebase/firestore";
 import { useState } from "react";
+import { updatePassword, reauthenticateWithCredential, EmailAuthProvider } from "firebase/auth";
+
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -58,7 +60,7 @@ export const signIn = (email, password, navigate, data) => {
                 isAdmin: false,
                 createdAt: Timestamp.fromDate(new Date()),
                 history: [],
-                trainingId: "",
+                trainingPlans: [],
                 email: user.email
             };
 
@@ -161,16 +163,6 @@ export const removeFavourites = async (exerciseName) => {
     }
   };
 
-export const addTrainingPlan = (data) => {
-    return addDoc(doc(TrainingPlan), data)
-        .then(() => {
-            console.log("Training plan added successfully");
-        })
-        .catch((err) => {
-            console.error("Error adding training plan:", err);
-        });
-};
-
 export const addFavourites = (exercise) => {
     return updateDoc(doc(User, auth.currentUser.uid), {
         favourite: arrayUnion(exercise)
@@ -182,6 +174,70 @@ export const addFavourites = (exercise) => {
             console.error("Error adding favourite exercise:", err);
         });
 };
+
+export const addTrainingHistory = (training) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        history: arrayUnion(training)
+    })
+        .then(() => {
+            console.log("Training added successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error adding training to history:", err);
+        });
+};
+
+export const addNewPlan = (plan) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        trainingPlans: arrayUnion(plan)
+    })
+        .then(() => {
+            console.log("Training added successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error adding training to history:", err);
+        });
+};
+
+export const removePlan = (plan) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        trainingPlans: arrayRemove(plan)
+    })
+        .then(() => {
+            console.log("Training removed successfully to history");
+        })
+        .catch((err) => {
+            console.error("Error removing training to history:", err);
+        });
+};
+
+export const addTrainingPlan = (data) => {
+    return addDoc(TrainingPlan, data)
+        .then(() => {
+            console.log("Training plan added successfully");
+        })
+        .catch((err) => {
+            console.error("Error adding training plan:", err);
+        });
+};
+
+export const removeTrainingHistory = async (training) => {
+    try {
+      const userDocRef = doc(db, "User", auth.currentUser.uid);
+  
+      await updateDoc(userDocRef, {
+        history: arrayRemove({
+          trainingName: training.trainingName,
+          date: training.date,
+        }),
+      });
+  
+      console.log("Training removed from history successfully");
+    } catch (err) {
+      console.error("Error removing from history:", err);
+    }
+  };
+
 
 export const getUser = () => {
     return getDoc(doc(db, 'User', auth.currentUser.uid))
@@ -229,4 +285,118 @@ export const getTrainingPlan = () => {
         .catch((err) => {
             console.error("Error retrieving training plans:", err);
         });
+};
+
+export const changeHeight = (h) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        height: h
+    })
+        .then(() => {
+            console.log("height updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating height :", err);
+        });
+};
+
+export const changeAge = (a) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        age: a
+    })
+        .then(() => {
+            console.log("age updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating age :", err);
+        });
+};
+export const changeUsername = (u) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        username: u
+    })
+        .then(() => {
+            console.log("username updated successfully");
+        })
+        .catch((err) => {
+            console.error("Error updating username:", err);
+        });
+};
+
+export const changePassword = async (newPassword) => {
+    try {
+      const user = auth.currentUser;
+  
+      if (!user) {
+        throw new Error("No user is currently signed in.");
+      }
+      await updatePassword(user, newPassword);
+      console.log("Password updated successfully.");
+    } catch (error) {
+      console.error("Error changing password:", error.message);
+    }
+  };
+
+
+export const updateTrainingPlanProgress = async (trainingName, newProgress) => {
+    try {
+      const userDocRef = doc(User, auth.currentUser.uid);
+      const userDocSnap = await getDoc(userDocRef);
+  
+      if (userDocSnap.exists()) {
+        const userData = userDocSnap.data();
+  
+        // Update the progress for the matching training plan
+        const updatedTrainingPlans = userData.trainingPlans.map((plan) => {
+          if (plan.name === trainingName) {
+            return { ...plan, progress: newProgress };
+          }
+          return plan;
+        });
+  
+        // Save the updated array back to Firestore
+        await updateDoc(userDocRef, {
+          trainingPlans: updatedTrainingPlans,
+        });
+  
+        console.log(`Progress for '${trainingName}' updated to ${newProgress}%`);
+      } else {
+        console.error("User document does not exist.");
+        alert("User data not found.");
+      }
+    } catch (error) {
+      console.error("Error updating training progress:", error);
+      alert(`Error updating progress: ${error.message}`);
+    }
+  };
+  
+
+export const updateExercise = async (oldExercise, exercise) => {
+    const exercisesRef = Exercise;
+
+    const q = query(exercisesRef, where("name", "==", oldExercise.name));
+
+  try {
+    const querySnapshot = await getDocs(q);
+
+    if (!querySnapshot.empty) {
+      const docSnapshot = querySnapshot.docs[0];  
+      const docId = docSnapshot.id;
+
+      const exerciseDocRef = doc(db, "Exercise", docId);
+
+      await updateDoc(exerciseDocRef, {
+        name: exercise.name,
+        description: exercise.description,
+        muscleGroup: exercise.muscleGroup,
+        difficulty: exercise.difficulty,
+        pictureURL: exercise.pictureURL
+      });
+
+      console.log("Exercise updated successfully!");
+    } else {
+      console.log("No matching exercise found!");
+    }
+  } catch (error) {
+    console.error("Error updating exercise:", error);
+  }
 };
