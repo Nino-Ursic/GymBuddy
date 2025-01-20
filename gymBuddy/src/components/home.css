@@ -112,6 +112,8 @@
   justify-content: flex-start;
   align-items: center;
   margin-bottom: 1.5rem;
+  z-index: 2;
+  width: 30%;
 }
 
 /* Label for the dropdown */
@@ -262,4 +264,12 @@
   justify-content: flex-start;
 }
 
+svg path {
+  fill: transparent; /* No fill by default */
+  transition: fill 0.3s ease; /* Smooth transition for fill change */
+}
+
+svg path:hover {
+  fill: rgba(255, 0, 0, 0.3); /* Transparent red fill on hover */
+}
 
