@@ -3,7 +3,7 @@ import "./newTraining.css";
 import "./myTraining.css";
 import React, { useState, useEffect, useRef } from "react";
 import { auth, getTrainingPlan, removePlan } from '../config/firebase-config.js';
-import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan, updateTrainingPlanProgress } from '../config/firebase-config';
+import { getTraining, addTrainingHistory, removeTrainingHistory, getUser, addNewPlan, updateTrainingPlanProgress, updateUserWeights } from '../config/firebase-config';
 
 import { Line } from 'react-chartjs-2';
 import {
@@ -115,6 +115,8 @@ function Training() {
 
   const [isModalOpenTP, setIsModalOpenTP] = useState(false);
   const [isModalOpenT, setIsModalOpenT] = useState(false);
+
+  const [currentWeight, setCurrentWeight] = useState(""); 
 
   
 
@@ -367,6 +369,32 @@ function Training() {
     }
   }
 
+  const handleWeightSubmit = async (e) => {
+    e.preventDefault();
+  
+    if (!currentWeight || isNaN(currentWeight)) {
+      alert("Please enter a valid number for weight.");
+      return;
+    }
+  
+    const newWeightEntry = {
+      weight: parseFloat(currentWeight),
+      date: new Date(),
+    };
+  
+    try {
+      const updatedWeights = newWeightEntry;
+  
+      await updateUserWeights(updatedWeights); 
+      console.log("Weight added:", newWeightEntry);
+  
+      setCurrentWeight(""); 
+      fetchWeights(); 
+    } catch (error) {
+      console.error("Error adding weight:", error);
+    }
+  };
+
   return (
     <>
         <div className="myTraining-container spacing">
@@ -483,9 +511,23 @@ function Training() {
               <div className="stats-title">
                 <h1>Stats</h1>
               </div>
-                <div className="new-weight">
-
+              <div className="new-weight">
+                <form onSubmit={handleWeightSubmit} className="">
+                  <div className="input-group">
+                    <label htmlFor="weight"><h3>Enter Current Weight:</h3></label>
+                    <input
+                      type="number"
+                      id="weight"
+                      value={currentWeight}
+                      onChange={(e) => setCurrentWeight(e.target.value)}
+                      placeholder="Enter weight (kg)"
+                      required
+                    />
+                    </div>
+                    <button type="submit" className="filter-dropdown">Add Weight</button>
+                  </form>
                 </div>
+
                 <div className="weight-chart">
                 <Line data={data} options={options} />
                 </div>

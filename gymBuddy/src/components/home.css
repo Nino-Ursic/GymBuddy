@@ -58,7 +58,7 @@
 }
 
 .title-container .edit.training{
-  height: 50%;
+  height: 40%;
 }
 
 .heart-icon {
@@ -261,3 +261,5 @@
   box-sizing: border-box;
   justify-content: flex-start;
 }
+
+

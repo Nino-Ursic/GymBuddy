@@ -433,3 +433,15 @@ export const updateTraining = async (oldTraining, training) => {
     console.error("Error updating training:", error);
   }
 };
+
+export const updateUserWeights = (weight) => {
+    return updateDoc(doc(User, auth.currentUser.uid), {
+        weight: arrayUnion(weight)
+    })
+        .then(() => {
+            console.log("Favourite exercise added successfully");
+        })
+        .catch((err) => {
+            console.error("Error adding favourite exercise:", err);
+        });
+};
